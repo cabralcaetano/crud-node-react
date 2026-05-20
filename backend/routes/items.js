@@ -23,7 +23,7 @@ router.put('/tasks/:id', (req, res) => {
 });
 
 router.delete('/tasks/:id', (req, res) => {
-    const del = db.prepare('DELETE FROM tasks WHERE id = ?').run(req.params.id);
+    const task = db.prepare('DELETE FROM tasks WHERE id = ?').run(req.params.id);
     res.json({ message: 'Task deletada com sucesso' });
 });
 

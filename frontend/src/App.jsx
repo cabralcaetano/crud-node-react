@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-
-// URL base da API em uma constante — se a porta mudar, muda só aqui
-const API = 'http://localhost:3001/api'
+import { getTasks, addTask, updateTask, deleteTask } from './services/api'
 
 function App() {
 
@@ -10,8 +8,7 @@ function App() {
 
   // busca todas as tasks ao carregar a página (array vazio = roda só uma vez)
   useEffect(() => {
-    fetch(`${API}/tasks`)
-      .then(res => res.json())
+    getTasks()
       .then(data => setTasks(data))
   }, [])
 
@@ -21,12 +18,7 @@ function App() {
     // validação no frontend: não envia se título estiver vazio
     if (!title) return
 
-    fetch(`${API}/tasks`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title })
-    })
-      .then(res => res.json())
+    addTask(title)
       .then(newTask => {
         setTasks([...tasks, newTask])
         setTitle('') // limpa o input após adicionar
@@ -34,9 +26,7 @@ function App() {
   }
 
   function handleDelete(id) {
-    fetch(`${API}/tasks/${id}`, {
-      method: 'DELETE'
-    })
+    deleteTask(id)
       // remove a task do array local sem precisar rebuscar tudo da API
       .then(() => setTasks(tasks.filter(task => task.id !== id)))
   }
@@ -48,13 +38,7 @@ function App() {
     // busca a task atual no array pelo id para pegar o done atual
     const currentTask = tasks.find(t => t.id === id)
 
-    fetch(`${API}/tasks/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      // envia o novo título + o done atual (sem sobrescrever com undefined)
-      body: JSON.stringify({ title: editingTitle, done: currentTask.done })
-    })
-      .then(res => res.json())
+    updateTask(id, editingTitle, currentTask.done)
       .then(updatedTask => {
         // substitui a task antiga pela atualizada no array
         setTasks(tasks.map(t => t.id === id ? updatedTask : t))
@@ -63,13 +47,8 @@ function App() {
   }
 
   function handleToggleDone(task) {
-    fetch(`${API}/tasks/${task.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      // inverte o done atual: se era 0 vira 1, se era 1 vira 0
-      body: JSON.stringify({ title: task.title, done: task.done === 1 ? 0 : 1 })
-    })
-      .then(res => res.json())
+    // inverte o done atual: se era 0 vira 1, se era 1 vira 0
+    updateTask(task.id, task.title, task.done === 1 ? 0 : 1)
       .then(updatedTask => {
         setTasks(tasks.map(t => t.id === task.id ? updatedTask : t))
       })

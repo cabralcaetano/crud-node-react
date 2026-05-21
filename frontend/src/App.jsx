@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import './App.css'
 
 function App() {
 
@@ -48,24 +49,27 @@ function App() {
 
   return (
     <>
-      <input
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        placeholder="Nova task"
-      />
-      <button onClick={handleAdd}>Adicionar</button>
+      <h1>Tasks</h1>
+      <div className="form">
+        <input
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          placeholder="Nova task"
+        />
+        <button className="btn-add" onClick={handleAdd}>Adicionar</button>
+      </div>
       <ul>
         {tasks.map(task => (
           <li key={task.id}>
             {task.id === editingId
               ? <input value={editingTitle} onChange={e => setEditingTitle(e.target.value)} />
-              : task.title
+              : <span>{task.title}</span>
             }
             {task.id === editingId
-              ? <button onClick={() => handleSave(task.id)}>Salvar</button>
+              ? <button className="btn-save" onClick={() => handleSave(task.id)}>Salvar</button>
               : <button onClick={() => { setEditingId(task.id); setEditingTitle(task.title) }}>Editar</button>
             }
-            <button onClick={() => handleDelete(task.id)}>Deletar</button>
+            <button className="btn-delete" onClick={() => handleDelete(task.id)}>Deletar</button>
           </li>
         ))}
       </ul>

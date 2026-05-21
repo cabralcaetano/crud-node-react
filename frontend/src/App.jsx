@@ -38,7 +38,7 @@ function App() {
     fetch(`http://localhost:3001/api/tasks/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: editingTitle, done: 0 })
+      body: JSON.stringify({ title: editingTitle })
     })
       .then(res => res.json())
       .then(updatedTask => {

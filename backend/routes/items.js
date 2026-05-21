@@ -12,6 +12,11 @@ router.get('/tasks', (req, res) => {
 
 // INSERT
 router.post('/tasks', (req, res) => {
+    // validacao
+    if (req.body.title === null) {
+        console.log('titulo vazio')
+        break;
+    }
     // faz
     const result = db.prepare('INSERT INTO tasks (title, done) VALUES (?, ?)').run(req.body.title, 0);
 

@@ -13,9 +13,8 @@ router.get('/tasks', (req, res) => {
 // INSERT
 router.post('/tasks', (req, res) => {
     // validacao
-    if (req.body.title === null) {
-        console.log('titulo vazio')
-        break;
+    if (!req.body.title) {
+        return res.status(400).json({ error: 'título obrigatório' })
     }
     // faz
     const result = db.prepare('INSERT INTO tasks (title, done) VALUES (?, ?)').run(req.body.title, 0);
@@ -29,6 +28,12 @@ router.post('/tasks', (req, res) => {
 // UPDATE
 router.put('/tasks/:id', (req, res) => {
     //             ^^^^ onde o user joga o id da column
+
+    // validacao
+    if (!req.body.title) {
+        return res.status(400).json({ error: 'título obrigatório' })
+    }
+
     // faz
     const put = db.prepare('UPDATE tasks SET title = ?, done = ? WHERE id = ?').run(req.body.title, req.body.done, req.params.id);
 

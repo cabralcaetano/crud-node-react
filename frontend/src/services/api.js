@@ -1,3 +1,4 @@
+// exportar para .env
 const API = 'http://localhost:3001/api'
 
 export function getTasks() {
@@ -14,13 +15,15 @@ export function addTask(title) {
   }).then(res => res.json())
 }
 
-export function updateTask(id, title, done) {
+// olhar aq dps
+export async function updateTask(id, title, done) {
   // recebe id, title, done — faz o PUT
-  return fetch(`${API}/tasks/${id}`, {
+  const res = await fetch(`${API}/tasks/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title, done })
-  }).then(res => res.json())
+  })
+  return await res.json()
 }
 
 export function deleteTask(id) {

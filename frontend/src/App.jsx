@@ -1,3 +1,4 @@
+// passar a functions para um arquivo
 import { useState, useEffect } from 'react'
 import './App.css'
 import { getTasks, addTask, updateTask, deleteTask } from './services/api'
@@ -16,7 +17,7 @@ function App() {
 
   function handleAdd() {
     // validação no frontend: não envia se título estiver vazio
-    if (!title) return
+    if (!title) return;
 
     addTask(title)
       .then(newTask => {
